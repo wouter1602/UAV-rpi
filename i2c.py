@@ -19,21 +19,22 @@ class I2C:
         s, b, d = self._pi.bsc_i2c(self._pi_address)
 
         if b:
-            if d[0] == ord('t'):  # 116 send 'HH:MM:SS'
+            if d[ 0 ] == ord('t'):  # 116 send 'HH:MM:SS'
                 print("sent = {} FR = {} received = {} [{}]".format(s >> 16, s & 0xFFF, b, d))
-                s, b, d = self._pi.bsc_i2c(self._pi_address, "{}*".format(time.asctime()[11:19]))
+                s, b, d = self._pi.bsc_i2c(self._pi_address, "{}*".format(time.asctime()[ 11:19 ]))
                 print("sent = {} FR = {} received = {} [{}]".format(s >> 16, s & 0xFFF, b, d))
-            elif d[0] == ord('d'):
+            elif d[ 0 ] == ord('d'):
                 print("sent = {} FR= {} received = {} [{}]".format(s >> 16, s & 0xFFF, b, d))
-                s, b, d = self._pi.bsc_i2c(self._pi_address, "{}*".format(time.asctime()[:10]))
+                s, b, d = self._pi.bsc_i2c(self._pi_address, "{}*".format(time.asctime()[ :10 ]))
                 print("sent = {} FR = {} received = {} [{}]".format(s >> 16, s & 0xFFF, b, d))
-            elif d[0] == ord('D'):
+            elif d[ 0 ] == ord('D'):
                 print("sent = {} FR= {} received = {} [{}]".format(s >> 16, s & 0xFFF, b, d))
                 for i in d:
                     if i == ord('\t'):
                         print("Tab found")
 
-    def convert_to_ints(self, bytes: bytearray):
+    @staticmethod
+    def convert_to_ints(bytes: bytearray):
         print("L")
 
     def __del__(self):

@@ -1,43 +1,42 @@
 #!/usr/bin/python3
 
 # Wouter van Velzen (19093861@student.hhs.nl)
+import numpy as np
 
 from i2c import I2C
 from markers import Video
+import cv2 as cv
 import time
-import pigpio
+
+# import pigpio
 
 I2C_ADDR = 0x09
 
 
-def i2c(pi, id=0, tick=0):
-    s, b, d = pi.bsc_i2c(I2C_ADDR)
-    if b:
-        if d[0] == ord('t'):  # 116 send 'HH:MM:SS'
-            print("sent = {} FR = {} received = {} [{}]".format(s >> 16, s & 0xFFF, b, d))
-            s, b, d = pi.bsc_i2c(I2C_ADDR, "{}*".format(time.asctime()[11:19]))
-            print("sent = {} FR = {} received = {} [{}]".format(s >> 16, s & 0xFFF, b, d))
-        elif d[0] == ord('d'):
-            print("sent = {} FR= {} received = {} [{}]".format(s >> 16, s & 0xFFF, b, d))
-            s, b, d = pi.bsc_i2c(I2C_ADDR, "{}*".format(time.asctime()[:10]))
-            print("sent = {} FR = {} received = {} [{}]".format(s >> 16, s & 0xFFF, b, d))
-
-
 def main():
     print("Hi")
-    i2ctmp = I2C(0x09)
+    # i2ctmp = I2C(0x09)
 
+    video = Video(False)
 
-    # pi = pigpio.pi()
-    # if not pi.connected:
-    #     print("[ERROR] can't connect to PI GPIO.")
-    #     exit()
-    #
-    # # Respond to BSC slave activity
-    # e = pi.event_callback(pigpio.EVENT_BSC, i2c)
-    # pi.bsc_i2c(I2C_ADDR)  # Configure BSC as I2C slave
+    while True:
+        markers_found = video.detect_markers()
+        if markers_found is not None:
+            for i in range(markers_found.shape[ 0 ]):
+                print("[INFO]: Marker {:d} Found at [{:d},{:d}]".format(markers_found[ i, 0 ], markers_found[ i, 1 ],
+                                                                        markers_found[ i, 2 ]))
+        else:
+            print("[INFO]: No markers found")
 
-    time.sleep(600)
+        print("\n")
+
+        cv.imshow("Feed", video.frame)
+        if cv.waitKey(1) == 27:
+            break  # esc to quit
+
+    cv.destroyAllWindows()
+
+    # time.sleep(600)
 
 
 # Press the green button in the gutter to run the script.
