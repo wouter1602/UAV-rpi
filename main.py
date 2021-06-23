@@ -3,6 +3,7 @@
 # Wouter van Velzen (19093861@student.hhs.nl)
 
 from i2c import I2C
+from markers import Video
 import time
 import pigpio
 
@@ -25,6 +26,8 @@ def i2c(pi, id=0, tick=0):
 def main():
     print("Hi")
     i2ctmp = I2C(0x09)
+
+
     # pi = pigpio.pi()
     # if not pi.connected:
     #     print("[ERROR] can't connect to PI GPIO.")
