@@ -1,4 +1,5 @@
 #!/usr/bin/python3
+
 from typing import Tuple, Union
 
 import cv2 as cv
@@ -38,7 +39,7 @@ class Video:
         corners, ids, rejected = cv.aruco.detectMarkers(frame, self._aruco_dictionary,
                                                         parameters=self._aruco_parameters)
         if np.all(ids is None):
-            print("[INFO]: No markers detected.")
+            # print("[INFO]: No markers detected.")
             return None
         else:
             print("[INFO]: {:d} markers found.".format(ids.shape[ 0 ]))
